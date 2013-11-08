@@ -5,7 +5,7 @@ require 'http/2/examples/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "http-2-examples"
-  spec.version       = Http::2::Examples::VERSION
+  spec.version       = Http2::Examples::VERSION
   spec.authors       = ["pochi"]
   spec.email         = ["pochi.black@gmail.com"]
   spec.description   = %q{TODO: Write a gem description}
