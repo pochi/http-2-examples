@@ -1,8 +1,8 @@
-require "net/http"
 require "thor"
 require "systemu"
 
-module Http
+
+module Http2
   class Handshake < Thor
     desc "dump", "Communication with http using tcpdump"
     def dump
@@ -25,14 +25,10 @@ module Http
         Thor::Shell::Color.new
       end
 
-      def remove_dump_file
-        systemu("sudo rm handshake.cap")
-      end
-
       def tcpdump_capture
         @tcp_process = Thread.fork do
           shell.say_status("[start]", "tcpdump",:green)
-          systemu("sudo tcpdump -w handshake.cap -i lo0 port 9292")
+          systemu("sudo tcpdump -w handshake.cap -i lo0 port 8080")
         end
 
         sleep 3
@@ -43,6 +39,15 @@ module Http
           process_id =  line.split(" ")[1]
           systemu("sudo kill -STOP #{process_id}")
         end
+      end
+
+      def send_request
+        shell.say_status("[start]", "client",:green)
+        load File.expand_path(File.dirname(__FILE__) + "/client.rb")
+      end
+
+      def remove_dump_file
+        systemu("sudo rm handshake.cap")
       end
 
       def before
@@ -66,13 +71,6 @@ module Http
       def display_capture
         shell.say_status("[finish]", "you can display tcp capture with 'tcpdump -r handshake.cap'",:green)
       end
-
-      def send_request
-        http = Net::HTTP.new("127.0.0.1", 9292)
-        http.get("/hoge")
-        http.get("/moge")
-      end
-
     end
   end
 end
