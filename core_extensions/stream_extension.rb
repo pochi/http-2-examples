@@ -6,7 +6,7 @@ module HTTP2
     alias_method :debug_initialize, :initialize
     def initialize(id, priority, window, parend = nil)
       stream = debug_initialize(id, priority, window, parend = nil)
-      shell.say_status("[Stream]", "Called initialize(id, priority, window, parend = nil)", :on_yellow)
+      shell.say_status(common_header, "Called initialize(id, priority, window, parend = nil)", :on_yellow)
       common_log_output
       stream
     end
@@ -20,7 +20,7 @@ module HTTP2
 
     alias_method :debug_send, :send
     def send(frame)
-      shell.say_status("[Stream]", "Called send(frame)", :on_yellow)
+      shell.say_status(common_header, "Called send(frame)", :on_yellow)
       common_log_output(frame)
       debug_send(frame)
     end
@@ -31,12 +31,15 @@ module HTTP2
 
     private
     def common_log_output(frame=nil)
-      shell.say_status("[Stream]", "id: " + @id.inspect, :on_yellow)
-      shell.say_status("[Stream]", "state: " + @state.inspect, :on_yellow)
-      shell.say_status("[Stream]", "window: " + @window.inspect , :on_yellow)
-      shell.say_status("[Stream]", "parent: " + @parent.inspect, :on_yellow)
-      shell.say_status("[Stream]", "priority: " + @priority.inspect, :on_yellow)
-      shell.say_status("[Stream]", "frame: " + frame.inspect, :on_yellow) if frame
+      shell.say_status(common_header, "state: " + @state.inspect, :on_yellow)
+      shell.say_status(common_header, "window: " + @window.inspect , :on_yellow)
+      shell.say_status(common_header, "parent: " + @parent.inspect, :on_yellow)
+      shell.say_status(common_header, "priority: " + @priority.inspect, :on_yellow)
+      shell.say_status(common_header, "frame: " + frame.inspect, :on_yellow) if frame
+    end
+
+    def common_header
+      "[Stream #{@id}]"
     end
   end
 end
