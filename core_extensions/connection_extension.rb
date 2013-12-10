@@ -4,6 +4,7 @@ require "thor/shell"
 module HTTP2
   class Connection
 
+
     # データ受信時の処理
     alias_method :debug_receive, :receive
     def receive(data)
@@ -15,12 +16,7 @@ module HTTP2
     alias_method :debug_new_stream, :new_stream
     def new_stream(priority: DEFAULT_PRIORITY, parent: nil)
       shell.say_status("[Connection]", "Called new_stream(frame)", :on_cyan)
-      shell.say_status("[Before]", "", :on_cyan)
-      shell.say_status("[Connection]", "priority: " + DEFAULT_PRIORITY.to_s, :on_cyan)
-      shell.say_status("[Connection]", "state: " + @state.to_s, :on_cyan)
-      shell.say_status("[Connection]", "stream_id: " + @stream_id.to_s, :on_cyan)
       stream = debug_new_stream(priority: DEFAULT_PRIORITY, parent: nil)
-      shell.say_status("[After]", "", :on_cyan)
       shell.say_status("[Connection]", "priority: " + DEFAULT_PRIORITY.to_s, :on_cyan)
       shell.say_status("[Connection]", "state: " + @state.to_s, :on_cyan)
       shell.say_status("[Connection]", "stream_id: " + @stream_id.to_s, :on_cyan)
